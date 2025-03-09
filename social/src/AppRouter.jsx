@@ -6,12 +6,15 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 
+import Show from "./pages/Show";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/show/:id" element={<Show />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
