@@ -5,6 +5,13 @@ const prisma = new PrismaClient();
 const cors = require("cors");
 app.use(cors());
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+const { usersRouter } = require("./routes/users");
+app.use("/users", usersRouter);
+
 app.get("/posts", async (req, res) => {
   const data = await prisma.post.findMany({
     include: { user: true, comments: true },

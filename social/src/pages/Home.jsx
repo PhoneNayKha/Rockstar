@@ -28,9 +28,11 @@ export default function Home() {
   }
   return (
     <Box sx={{ p: 2 }}>
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      <CardContent>
+        {posts.map((post) => (
+          <Post key={post.id} post={post} />
+        ))}
+      </CardContent>
     </Box>
   );
 }

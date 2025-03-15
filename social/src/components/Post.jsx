@@ -1,6 +1,22 @@
-import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  IconButton,
+  Card,
+  CardContent,
+  Typography,
+} from "@mui/material";
 
+import {
+  ChatBubbleOutline as CommentIcon,
+  FavoriteBorder as LikeIcon,
+} from "@mui/icons-material";
+
+import { green } from "@mui/material/colors";
 import { useNavigate } from "react-router";
+import { formatRelative } from "date-fns";
 
 export default function Post({ post }) {
   const navigate = useNavigate();
@@ -12,13 +28,37 @@ export default function Post({ post }) {
       <CardContent>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
           <Avatar />
-          <Typography>{post.user.name}</Typography>
+          <Box>
+            <Typography>{post.user.name}</Typography>
+            <Typography sx={{ fontSize: 12, color: green[500] }}>
+              {formatRelative(new Date(post.created), new Date())}
+            </Typography>
+          </Box>
         </Box>
         <Typography
           sx={{ cursor: "pointer" }}
           onClick={() => navigate(`/show/${post.id}`)}>
           {post.content}
         </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-around", pt: 3 }}>
+          <ButtonGroup>
+            <IconButton>
+              <LikeIcon color="error" fontSize="18" />
+            </IconButton>
+            <Button variant="text" size="small">
+              0
+            </Button>
+          </ButtonGroup>
+
+          <ButtonGroup onClick={() => navigate(`/show/${post.id}`)}>
+            <IconButton>
+              <CommentIcon color="success" fontSize="18" />
+            </IconButton>
+            <Button variant="text" size="small">
+              {post.comments.length}
+            </Button>
+          </ButtonGroup>
+        </Box>
       </CardContent>
     </Card>
   );
