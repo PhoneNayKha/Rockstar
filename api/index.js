@@ -1,13 +1,19 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+
 const cors = require("cors");
 app.use(cors());
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
+// const { auth } = require("./middlewares/auth");
 
 const { usersRouter } = require("./routes/users");
 app.use("/users", usersRouter);
@@ -24,7 +30,7 @@ app.get("/posts", async (req, res) => {
 
 app.get("/posts/:id", async (req, res) => {
   const id = req.params.id;
-  const data = await prisma.post.findUnique({
+  const post = await prisma.post.findUnique({
     where: { id: parseInt(id) },
     include: {
       user: true,
@@ -33,9 +39,19 @@ app.get("/posts/:id", async (req, res) => {
       },
     },
   });
-  res.json(data);
+
+  res.json(post);
+});
+
+app.delete("/comments/:id", async (req, res) => {
+  const id = req.params.id;
+  const comment = await prisma.comment.delete({
+    where: { id: parseInt(id) },
+  });
+
+  res.json(comment);
 });
 
 app.listen(8080, () => {
-  console.log("API running at 8080...");
+  console.log("Api running at 8080...");
 });

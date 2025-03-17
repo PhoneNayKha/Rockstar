@@ -2,7 +2,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppRouter from "./AppRouter";
 
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -17,6 +17,30 @@ export const useApp = () => {
 export default function AppProvider() {
   const [mode, setMode] = useState("dark");
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch("http:/localhost:8080/users/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) =>
+          response
+            .json()
+            .then((data) => ({ status: response.status, body: data }))
+        )
+        .then(({ status, body }) => {
+          if (status === 200) {
+            setUser(body);
+          } else {
+            localStorage.removeItem("token");
+          }
+        });
+    }
+  }, []);
 
   const theme = useMemo(() => {
     return createTheme({
@@ -30,7 +54,7 @@ export default function AppProvider() {
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AppContext.Provider
-          value={{ mode, setMode, openDrawer, setOpenDrawer }}
+          value={{ mode, setMode, openDrawer, setOpenDrawer, user, setUser }}
         >
           <CssBaseline />
           <AppRouter />

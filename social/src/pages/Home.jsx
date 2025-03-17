@@ -1,4 +1,4 @@
-import { Avatar, Card, CardContent, Box, Typography } from "@mui/material";
+import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import Post from "../components/Post";
 
@@ -26,13 +26,12 @@ export default function Home() {
   if (isLoading) {
     return <Typography>Loading...</Typography>;
   }
+
   return (
-    <Box sx={{ p: 2 }}>
-      <CardContent>
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </CardContent>
+    <Box>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
     </Box>
   );
 }

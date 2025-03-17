@@ -3,9 +3,9 @@ import {
   Box,
   Button,
   ButtonGroup,
-  IconButton,
   Card,
   CardContent,
+  IconButton,
   Typography,
 } from "@mui/material";
 
@@ -15,18 +15,23 @@ import {
 } from "@mui/icons-material";
 
 import { green } from "@mui/material/colors";
-import { useNavigate } from "react-router";
 import { formatRelative } from "date-fns";
+import { useNavigate } from "react-router";
 
 export default function Post({ post }) {
   const navigate = useNavigate();
+
   return (
-    <Card
-      sx={{
-        mb: 2,
-      }}>
+    <Card sx={{ mb: 2 }}>
       <CardContent>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            mb: 1,
+          }}
+        >
           <Avatar />
           <Box>
             <Typography>{post.user.name}</Typography>
@@ -37,7 +42,8 @@ export default function Post({ post }) {
         </Box>
         <Typography
           sx={{ cursor: "pointer" }}
-          onClick={() => navigate(`/show/${post.id}`)}>
+          onClick={() => navigate(`/show/${post.id}`)}
+        >
           {post.content}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "space-around", pt: 3 }}>

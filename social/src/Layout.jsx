@@ -2,15 +2,15 @@ import { Outlet } from "react-router";
 
 import { Container } from "@mui/material";
 
-import AppDrawer from "./components/AppDrawer";
 import Header from "./components/Header";
+import AppDrawer from "./components/AppDrawer";
 
 export default function Layout() {
   return (
     <>
       <Header />
       <AppDrawer />
-      <Container>
+      <Container maxWidth="sm" sx={{ mt: 4 }}>
         <Outlet />
       </Container>
     </>
