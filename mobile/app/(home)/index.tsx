@@ -1,25 +1,97 @@
-import { View, Text, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import { View, ScrollView, StyleSheet } from "react-native";
+import Text from "@/components/text";
+import { useQuery } from "@tanstack/react-query";
+import { useTheme } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
+type PostType = {
+  id: number;
+  content: string;
+  created: string;
+  user: {
+    name: string;
+    username: string;
+    bio: string;
+  };
+};
+
+async function fetchPosts(): Promise<PostType[]> {
+  const res = await fetch("http://localhost:8080/posts");
+  return res.json();
+}
 
 export default function Home() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View style={{ gap: 10 }}>
-        <Text style={{ fontSize: 24 }}>Hello Expo</Text>
-        <Link style={styles.link} href="/">
-          Home
-        </Link>
-        <Link style={styles.link} href="/about">
-          About
-        </Link>
-        <Link style={styles.link} href="/contact">
-          Contact
-        </Link>
+  const {
+    error,
+    isLoading,
+    data: posts,
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+
+  const { colors } = useTheme();
+
+  if (isLoading) {
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text>Loading</Text>
       </View>
-    </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text>Error loading posts.</Text>
+      </View>
+    );
+  }
+
+  if (!posts) {
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text>No post available.</Text>
+      </View>
+    );
+  }
+  return (
+    <ScrollView>
+      {posts.map((posts) => {
+        return (
+          <View style={[styles.card, { borderColor: colors.border }]}>
+            <View style={styles.cardBody}>
+              <Ionicons
+                name="person-circle"
+                size={48}
+                color={colors.text + "80"}
+              />
+              <View style={{ gap: 6 }}>
+                <Text style={styles.time}>{posts.created}</Text>
+                <Text style={styles.content}>{posts.content}</Text>
+              </View>
+            </View>
+          </View>
+        );
+      })}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  link: { fontSize: 24, color: "blue" },
+  card: {
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+  },
+  cardBody: {
+    flexDirection: "row",
+    gap: 14,
+  },
+  content: {
+    fontSize: 18,
+  },
+  time: {
+    color: "green",
+  },
 });

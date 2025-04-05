@@ -14,6 +14,15 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={24} name="search-outline" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: "Profile",
@@ -23,7 +32,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="settings"
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (
